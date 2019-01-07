@@ -1,7 +1,10 @@
 #-*-encoding=utf-8-*-
 file_name={
 	'html/login.html':'login',
-	'html/style.css':'style'
+	'html/style.css':'style',
+	'html/user_not_exist.html':'user_not_exist',
+	'html/password_incorrect.html':'password_incorrect',
+	'html/verification_success.html':'verification_success'
 }
 
 files={}
