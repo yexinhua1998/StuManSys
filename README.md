@@ -6,5 +6,7 @@
 ## 文件结构
 init.py:初始化程序，用于初始化数据库。
 config.py:配置文件，记录配置的设定。
+StuManSys.py:主程序入口
+file.py:将html文件、css文件等读入到内存的程序
 ## Log
 2019-01-07 增加了init.py和config.py。
