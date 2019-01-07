@@ -9,4 +9,5 @@ config.py:配置文件，记录配置的设定。
 StuManSys.py:主程序入口
 file.py:将html文件、css文件等读入到内存的程序
 ## Log
-2019-01-07 增加了init.py和config.py。
+2019-01-07 00:00 增加了init.py和config.py。
+2019-01-08 01:32 增加了StuManSys.py中用户登录的逻辑，并加入了html显示用户登录结果的页面。
