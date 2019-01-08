@@ -4,7 +4,9 @@ file_name={
 	'html/style.css':'style',
 	'html/user_not_exist.html':'user_not_exist',
 	'html/password_incorrect.html':'password_incorrect',
-	'html/verification_success.html':'verification_success'
+	'html/verification_success.html':'verification_success',
+	'html/student.html':'student',
+	'html/abandoned.html':'abandoned'
 }
 
 files={}
