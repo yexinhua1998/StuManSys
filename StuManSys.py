@@ -15,7 +15,8 @@ urls=(
 	'/AD','administrator',
 	'/SM','student_management',
 	'/TM','teaching_management',
-	'/st_score_query':'st_score_query',
+	'/ad_teacher_management','ad_teacher_management',
+	'/st_score_query','st_score_query',
 	'/logout','logout',
 	'/abandoned','abandoned',
 	'/(.+)','file_get'
@@ -77,10 +78,14 @@ def role_check(input_role,target_role_list):
 	if input_role in target_role_list:
 		return
 	else:
+		print('role check failed')
+		print('session:')
+		print(session)
 		raise web.seeother('/abandoned')
 
 class abandoned:
 	def GET(self):
+		print('abandoned')
 		return files['abandoned']
 
 class student:
@@ -112,6 +117,14 @@ class logout:
 	def GET(self):
 		session.kill()
 		raise web.seeother('/')
+
+##########################下面为功能部分#############################
+
+class ad_teacher_management:
+	def GET(self):
+		role_check(session.role,['AD'])
+		data=db.query('SELECT * FROM STUMAN.Teacher').list()
+		return render.ad_teacher_management(session.username,data)
 
 class st_score_query:
 	'''

@@ -1,0 +1,31 @@
+$def with (name,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>教师管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>行政人员</b>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table border="1" class="block-center">
+			<tr>
+				<td>教师号</td>
+				<td>姓名</td>
+				<td>收入</td>
+				<td>职称</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['tno']</td>
+				<td>$item['tname']</td>
+				<td>$item['tincome']</td>
+				<td>$item['tloc']</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
