@@ -13,7 +13,7 @@ $def with (name,data)
 	<div class="text-center">
 		<table border="1" class="block-center">
 			<tr>
-				<td>教师号</td>
+				<td>编号</td>
 				<td>姓名</td>
 				<td>收入</td>
 				<td>职称</td>
@@ -26,6 +26,32 @@ $def with (name,data)
 				<td>$item['tloc']</td>
 			</tr>
 		</table>
+		<div>
+			<p>添加新老师：</p><br>
+			<form name="add" action="/ad_add_teacher" method="post">
+				编号:<input type="text" name="tno"><br>
+				姓名:<input type="text" name="tname"><br>
+				收入:<input type="text" name="tincome"><br>
+				职称:<input type="text" name="tloc"><br>
+				<input type="submit" name="提交"><br>
+			</form>
+		</div>
+		<div>
+			<p>删除老师：</p><br>
+			<form name="delete" action="/ad_delete_teacher" method="post">
+				删除老师编号:<input type="text" name="tno"><input type="submit" name="提交">
+			</form>
+		</div>
+		<div>
+			<p>修改老师信息：</p><br>
+			<form name="update" action="/ad_update_teacher" method="post">
+				编号:<input type="text" name="tno"><br>
+				姓名:<input type="text" name="tname"><br>
+				收入:<input type="text" name="tincome"><br>
+				职称:<input type="text" name="tloc"><br>
+				<input type="submit" name="提交"><br>
+			</form>
+		</div>
 	</div>
 </body>
 </html>

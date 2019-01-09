@@ -1,0 +1,18 @@
+$def with (error)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>新增教师</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+$if not error:
+	<p>增加成功</p><br>
+	<a href="/ad_teacher_management">返回</a>
+$else:
+	<p>增加失败</p><br>
+	<a href="/ad_teacher_management">返回</a><br>
+	<p>错误信息:</p><br>
+	$error
+</body>

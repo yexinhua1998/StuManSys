@@ -1,0 +1,72 @@
+$def with (name,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>课程管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>教学管理人员</b>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table class="block-center" border="1">
+			<tr>
+				<td>课程号</td>
+				<td>课程名</td>
+				<td>学分</td>
+				<td>学年</td>
+				<td>学期</td>
+				<td>是否必修</td>
+				<td>教师编号</td>
+				<td>教师名</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['cno']</td>
+				<td>$item['cname']</td>
+				<td>$item['ccredit']</td>
+				<td>$item['cyear']</td>
+				<td>$item['cteam']</td>
+				<td>$item['ciscom']</td>
+				<td>$item['ctno']</td>
+				<td>$item['tname']</td>
+			</tr>
+		</table>
+		<div>
+			<form action="/tm_add_course" method="post">
+				<p>增加课程</p>
+				课程号:<input type="text" name="cno"><br>
+				课程名:<input type="text" name="cname"><br>
+				学&nbsp&nbsp&nbsp分:<input type="text" name="ccredit"><br>
+				学&nbsp&nbsp&nbsp年:<input type="text" name="cyear"><br>
+				学&nbsp&nbsp&nbsp期:<input type="text" name="cteam"><br>
+				教师号:<input type="text" name="ctno"><br>
+				必&nbsp&nbsp&nbsp修:<input type="checkbox" name="ciscom" value="true"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+		<div>
+			<form action="/tm_delete_course" method="post">
+				<p>删除课程</p>
+				课程号:<input type="text" name="cno"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+		<div>
+			<form action="/tm_update_course" method="post">
+				<p>修改课程</p>
+				课程号:<input type="text" name="cno"><br>
+				课程名:<input type="text" name="cname"><br>
+				学&nbsp&nbsp&nbsp分:<input type="text" name="ccredit"><br>
+				学&nbsp&nbsp&nbsp年:<input type="text" name="cyear"><br>
+				学&nbsp&nbsp&nbsp期:<input type="text" name="cteam"><br>
+				教师号:<input type="text" name="ctno"><br>
+				必&nbsp&nbsp&nbsp修:<input type="checkbox" name="ciscom" value="true"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+	</div>
+</body>
+</html>
