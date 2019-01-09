@@ -1,0 +1,62 @@
+$def with (name,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>课程管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>教学管理人员</b>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table class="block-center" border="1">
+			<tr>
+				<td>编号</td>
+				<td>专业</td>
+				<td>年级</td>
+				<td>班别</td>
+				<td>教师号</td>
+				<td>班主任</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['clano']</td>
+				<td>$item['clamajor']</td>
+				<td>$item['clagrade']</td>
+				<td>$item['claid']</td>
+				<td>$item['clatno']</td>
+				<td>$item['tname']</td>
+			</tr>
+		</table>
+		<div class="block-center">
+			<p>新增班级</p>
+			<form action="/tm_add_class" method="post">
+				班编号:<input type="text" name="clano"><br>
+				班专业:<input type="text" name="clamajor"><br>
+				班年级:<input type="text" name="clagrade"><br>
+				班&nbsp&nbsp&nbsp别:<input type="text" name="claid"><br>
+				教师号:<input type="text" name="clatno"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+		<div class="block-center">
+			<form action="/tm_delete_class" method="post">
+				<p>删除班级</p>
+				班编号:<input type="text" name="clano"><input type="submit" name="提交">
+			</form>
+		</div>
+		<div class="block-center">
+			<p>修改班级</p>
+			<form action="/tm_update_class" method="post">
+				班编号:<input type="text" name="clano"><br>
+				班专业:<input type="text" name="clamajor"><br>
+				班年级:<input type="text" name="clagrade"><br>
+				班&nbsp&nbsp&nbsp别:<input type="text" name="claid"><br>
+				教师号:<input type="text" name="clatno"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+	</div>
+</body>

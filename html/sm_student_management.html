@@ -1,0 +1,57 @@
+$def with (name,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>学生管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>学生管理人员</b>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table class="block-center" border="1">
+			<tr>
+				<td>学号</td>
+				<td>姓名</td>
+				<td>班级编号</td>
+				<td>宿舍</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['sno']</td>
+				<td>$item['sname']</td>
+				<td>$item['clano']</td>
+				<td>$item['sdo']</td>
+			</tr>
+		</table>
+		<div>
+			<form action="/sm_add_student" method="post">
+				<p>增加学生</p>
+				学号:<input type="text" name="sno"><br>
+				姓名:<input type="text" name="sname"><br>
+				班号:<input type="text" name="clano"><br>
+				宿舍:<input type="text" name="sdo"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+		<div>
+			<form action="/sm_delete_student" method="post">
+				<p>删除学生</p>
+				学号：<input type="text" name="sno">
+				<input type="submit" name="提交">
+			</form>
+		</div>
+		<div>
+			<form action="/sm_update_student" method="post">
+				<p>修改学生</p>
+				学号:<input type="text" name="sno"><br>
+				姓名:<input type="text" name="sname"><br>
+				班号:<input type="text" name="clano"><br>
+				宿舍:<input type="text" name="sdo"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+	</div>
+</body>

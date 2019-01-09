@@ -7,26 +7,42 @@ import config
 web.config.debug=False
 
 urls=(
+	#索引与验证
 	'/','index',
 	'/verification','verification',
-	'/main','main',
 	'/ST','student',
 	'/TE','teacher',
 	'/AD','administrator',
 	'/SM','student_management',
 	'/TM','teaching_management',
 
+	#教师管理部分
 	'/ad_teacher_management','ad_teacher_management',
 	'/ad_add_teacher','ad_add_teacher',
 	'/ad_delete_teacher','ad_delete_teacher',
 	'/ad_update_teacher','ad_update_teacher',
 
+	#课程管理部分
 	'/tm_course_management','tm_course_management',
 	'/tm_add_course','tm_add_course',
 	'/tm_delete_course','tm_delete_course',
 	'/tm_update_course','tm_update_course',
+	
+	#班级管理部分
+	'/tm_class_management','tm_class_management',
+	'/tm_add_class','tm_add_class',
+	'/tm_delete_class','tm_delete_class',
+	'/tm_update_class','tm_update_class',
+
+	#学生管理部分
+	'/sm_student_management','sm_student_management',
+	'/sm_add_student','sm_add_student',
+	'/sm_delete_student','sm_delete_student',
+	'/sm_update_student','sm_update_student',
 
 	'/st_score_query','st_score_query',
+
+	#登出、禁止与文件获取
 	'/logout','logout',
 	'/abandoned','abandoned',
 	'/(.+)','file_get'
@@ -173,7 +189,7 @@ class ad_update_teacher:
 		except Exception as e:
 			return render.operation_result('ad_teacher_management',e)
 
-######教务处部分######
+######课程管理部分######
 class tm_course_management:
 	def GET(self):
 		role_check(session.role,['TM'])
@@ -223,6 +239,96 @@ class tm_update_course:
 		except Exception as e:
 			return render.operation_result('tm_course_management',e)
 
+######班级管理部分######
+
+class tm_class_management:
+	def GET(self):
+		role_check(session.role,['TM'])
+		command="SELECT * FROM STUMAN.CLA_VIEW;"
+		data=db.query(command).list()
+		return render.tm_class_management(session.username,data)
+
+class tm_add_class:
+	def POST(self):
+		role_check(session.role,['TM'])
+		data=web.input()
+		command="INSERT INTO STUMAN.Class VALUES('%s','%s',%s,%s,'%s');"\
+		%(data.clano,data.clamajor,data.clagrade,data.claid,data.clatno)
+		try:
+			db.query(command)
+			return render.operation_result('/tm_class_management',None)
+		except Exception as e:
+			return render.operation_result('/tm_class_management',e)
+
+class tm_delete_class:
+	def POST(self):
+		role_check(session.role,['TM'])
+		data=web.input()
+		command="DELETE FROM STUMAN.Class WHERE CLAno='%s'"%data.clano 
+		try:
+			db.query(command)
+			return render.operation_result('tm_class_management',None)
+		except Exception as e:
+			return render.operation_result('tm_class_management',e)
+
+
+class tm_update_class:
+	def POST(self):
+		role_check(session.role,['TM'])
+		data=web.input()
+		command="UPDATE STUMAN.Class SET \
+		CLAmajor='%s',CLAgrade='%s',CLAid=%s,CLAtno='%s'\
+		WHERE CLAno='%s';"\
+		%(data.clamajor,data.clagrade,data.claid,data.clatno,data.clano)
+		try:
+			db.query(command)
+			return render.operation_result('/tm_class_management',None)
+		except Exception as e:
+			return render.operation_result('/tm_class_management',e)
+
+######学生管理部分######
+
+class sm_student_management:
+	def GET(self):
+		role_check(session.role,['SM'])
+		data=db.query('SELECT * FROM STUMAN.Student;').list()
+		return render.sm_student_management(session.username,data)
+
+class sm_add_student:
+	def POST(self):
+		role_check(session.role,['SM'])
+		data=web.input()
+		command="INSERT INTO STUMAN.Student VALUES\
+		('%s','%s','%s','%s');"%(data.sno,data.sname,data.clano,data.sdo)
+		try:
+			db.query(command)
+			return render.operation_result('/sm_student_management',None)
+		except Exception as e:
+			return render.operation_result('/sm_student_management',e)
+
+class sm_delete_student:
+	def POST(self):
+		role_check(session.role,['SM'])
+		data=web.input()
+		command="DELETE FROM STUMAN.Student WHERE Sno='%s'"%data.sno 
+		try:
+			db.query(command)
+			return render.operation_result('/sm_student_management',None)
+		except Exception as e:
+			return render.operation_result('/sm_student_management',e)
+
+class sm_update_student:
+	def POST(self):
+		role_check(session.role,['SM'])
+		data=web.input()
+		command="UPDATE STUMAN.Student SET Sname='%s',Clano='%s',Sdo='%s'\
+		WHERE Sno='%s';"%(data.sname,data.clano,data.sdo,data.sno)
+		try:
+			db.query(command)
+			return render.operation_result('/sm_student_management',None)
+		except Exception as e:
+			return render.operation_result('/sm_student_management',e)
+
 class st_score_query:
 	'''
 	学生的成绩查询功能
@@ -236,6 +342,7 @@ class st_score_query:
 		'''
 		data=db.query(command%session.no)
 		return 
+
 
 if __name__=='__main__':
 	app.run()
