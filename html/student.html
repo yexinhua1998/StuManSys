@@ -1,4 +1,4 @@
-$def with (name)
+$def with (name,no)
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +8,13 @@ $def with (name)
 </head>
 <body>
 	<div>
-		<p align="right">你是<b>$name</b>,身份是<b>学生</b>,<a href="/logout">退出</a></p>
+		<p align="right">你是<b>$name</b>,身份是<b>学生</b>,学号是<b>$no</b>,<a href="/logout">退出</a></p>
 	</div>
 	<div class="text-center">
-		<a href="/score_query">成绩查询</a>
+		<a href="/st_score_query">成绩查询</a>
 	</div>
 	<div class="text-center">
-		<a href="/sc_query">选课查询</a>
+		<a href="/st_sc_query">选课查询</a>
 	</div>
 </body>
 </html>

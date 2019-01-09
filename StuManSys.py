@@ -2,7 +2,6 @@
 
 import web
 from file import files,file_name
-import psycopg2
 import config
 
 web.config.debug=False
@@ -16,6 +15,7 @@ urls=(
 	'/AD','administrator',
 	'/SM','student_management',
 	'/TM','teaching_management',
+	'/st_score_query':'st_score_query',
 	'/logout','logout',
 	'/abandoned','abandoned',
 	'/(.+)','file_get'
@@ -37,7 +37,7 @@ role_showed={
 app=web.application(urls,globals())
 
 session=web.session.Session(app,web.session.DiskStore('sessions'),
-	initializer={'username':None,'role':None})
+	initializer={'username':None,'role':None,'no':None})
 
 class index:
 	def GET(self):
@@ -45,7 +45,10 @@ class index:
 
 class file_get:
 	def GET(self,path):
-		return files[file_name[path]]
+		try:
+			return files[file_name[path]]
+		except:
+			return files['abandoned']
 
 class verification:
 	def POST(self):
@@ -56,10 +59,12 @@ class verification:
 		else:
 			real_pw=result[0]['password'].strip()
 			role=result[0]['role'].strip()
+			no=result[0]['no'].strip()
 			print(real_pw)
 			if real_pw==input.password:
 				session.username=input.username
 				session.role=role
+				session.no=no
 				raise web.seeother('/'+session.role)
 			else:
 				return files['password_incorrect']
@@ -81,12 +86,12 @@ class abandoned:
 class student:
 	def GET(self):
 		role_check(session.role,['ST'])
-		return render.student(session.username)
+		return render.student(session.username,session.no)
 
 class teacher:
 	def GET(self):
 		role_check(session.role,['TE'])
-		return render.teacher(session.username)
+		return render.teacher(session.username,session.no)
 
 class administrator:
 	def GET(self):
@@ -108,11 +113,19 @@ class logout:
 		session.kill()
 		raise web.seeother('/')
 
-class score_query:
+class st_score_query:
+	'''
+	学生的成绩查询功能
+	'''
 	def GET(self):
-		if session.role != 'ST':
-			return files['abandoned']
-		return ''
+		role_check(session.role,['ST'])
+		command='''
+		SELECT Cno,Cname,Ccredit,Cyear,Cteam,Ciscom,Ctno,Tname,Score
+		FROM STUMAN.SCO_VIEW
+		WHERE Sno=%s;
+		'''
+		data=db.query(command%session.no)
+		return 
 
 if __name__=='__main__':
 	app.run()

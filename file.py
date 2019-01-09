@@ -11,7 +11,8 @@ file_name={
 
 files={}
 for key,value in file_name.items():
-	with open(key,'r') as f:
+	#with open(key,'r') as f:
+	with open(key,'r',encoding='utf-8') as f:
 		data=f.read()
-		data=data.decode('utf-8').encode('utf-8')
+		#data=data.decode('utf-8').encode('utf-8')
 		files[value]=data
