@@ -34,13 +34,27 @@ urls=(
 	'/tm_delete_class','tm_delete_class',
 	'/tm_update_class','tm_update_class',
 
+	#必修管理部分
+	'/tm_com_management','tm_com_management',
+	'/tm_add_cc','tm_add_cc',
+	'/tm_delete_cc','tm_delete_cc',
+
 	#学生管理部分
 	'/sm_student_management','sm_student_management',
 	'/sm_add_student','sm_add_student',
 	'/sm_delete_student','sm_delete_student',
 	'/sm_update_student','sm_update_student',
 
-	'/st_score_query','st_score_query',
+	#学生课程管理部分
+	'/st_course_management','st_course_management',
+	'/st_select_course','st_select_course',
+
+	#教师成绩管理部分
+	'/te_score_management','te_score_management',
+	'/te_update_score','te_update_score',
+
+	#教师查看成绩统计部分
+	'/te_score_statistic','te_score_statistic',
 
 	#登出、禁止与文件获取
 	'/logout','logout',
@@ -72,6 +86,7 @@ class index:
 
 class file_get:
 	def GET(self,path):
+		print('file_get')
 		try:
 			return files[file_name[path]]
 		except:
@@ -286,6 +301,37 @@ class tm_update_class:
 		except Exception as e:
 			return render.operation_result('/tm_class_management',e)
 
+######必修课管理部分######
+
+class tm_com_management:
+	def GET(self):
+		role_check(session.role,['TM'])
+		command="SELECT * FROM STUMAN.CC_VIEW;"
+		data=db.query(command).list()
+		return render.tm_com_management(session.username,data)
+
+class tm_add_cc:
+	def POST(self):
+		role_check(session.role,['TM'])
+		data=web.input()
+		command="SELECT class_insert_course('%s','%s');"%(data.clano,data.cno)
+		try:
+			db.query(command)
+			return render.operation_result('/tm_com_management',None)
+		except Exception as e:
+			return render.operation_result('/tm_com_management',e)
+
+class tm_delete_cc:
+	def POST(self):
+		role_check(session.role,['TM'])
+		data=web.input()
+		command="SELECT class_delete_course('%s','%s')"%(data.clano,data.cno)
+		try:
+			db.query(command)
+			return render.operation_result('/tm_com_management',None)
+		except Exception as e:
+			return render.operation_result('/tm_com_management',e)
+
 ######学生管理部分######
 
 class sm_student_management:
@@ -329,20 +375,55 @@ class sm_update_student:
 		except Exception as e:
 			return render.operation_result('/sm_student_management',e)
 
-class st_score_query:
-	'''
-	学生的成绩查询功能
-	'''
+
+
+
+######学生课程管理部分######
+
+class st_course_management:
 	def GET(self):
 		role_check(session.role,['ST'])
-		command='''
-		SELECT Cno,Cname,Ccredit,Cyear,Cteam,Ciscom,Ctno,Tname,Score
-		FROM STUMAN.SCO_VIEW
-		WHERE Sno=%s;
-		'''
-		data=db.query(command%session.no)
-		return 
+		command="SELECT * FROM STUMAN.SCO_VIEW WHERE sno='%s'"%(session.no)
+		data=db.query(command).list()
+		return render.st_course_management(session.username,session.no,data)
 
+class st_select_course:
+	def POST(self):
+		role_check(session.role,['ST'])
+		command="SELECT select_course('%s','%s')"%(session.no,web.input().cno)
+		try:
+			db.query(command)
+			return render.operation_result('/st_course_management',None)
+		except Exception as e:
+			return render.operation_result('/st_course_management',e)
+
+######教师成绩管理部分######
+class te_score_management:
+	def GET(self):
+		role_check(session.role,['TE'])
+		command="SELECT * FROM STUMAN.SCO_VIEW WHERE ctno='%s'"%session.no
+		data=db.query(command).list()
+		return render.te_score_management(session.username,session.no,data)
+
+class te_update_score:
+	def POST(self):
+		role_check(session.role,['TE'])
+		data=web.input()
+		command="SELECT teacher_update_score('%s','%s','%s',%s)"%\
+		(session.no,data.cno,data.sno,data.score)
+		try:
+			db.query(command)
+			return render.operation_result('/te_score_management',None)
+		except Exception as e:
+			return render.operation_result('/te_score_management',e)
+
+######教师成绩统计部分######
+class te_score_statistic:
+	def GET(self):
+		role_check(session.role,['TE'])
+		command="SELECT * FROM STUMAN.SCORE_STATISTIC_OUTER_VIEW;"
+		data=db.query(command).list()
+		return render.te_score_statistic(session.username,session.no,data)
 
 if __name__=='__main__':
 	app.run()

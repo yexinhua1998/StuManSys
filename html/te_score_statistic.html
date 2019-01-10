@@ -1,0 +1,51 @@
+$def with (name,no,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>成绩管理界面</title>
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>教师</b>,教师号是<b>$no</b>,
+			<a href="/TE">返回</a>,<a href="/logout">退出</a></p>
+	</div>
+	<div>
+		<table border="1" class="block-center">
+			<tr>
+				<td>课程号</td>
+				<td>课程名</td>
+				<td>学年</td>
+				<td>学期</td>
+				<td>教师号</td>
+				<td>教师名</td>
+				<td>班级号</td>
+				<td>年级</td>
+				<td>专业</td>
+				<td>班别</td>
+				<td>平均分</td>
+				<td>最高分</td>
+				<td>最低分</td>
+				<td>通过率</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['cno']</td>
+				<td>$item['cname']</td>
+				<td>$item['cyear']</td>
+				<td>$item['cteam']</td>
+				<td>$item['ctno']</td>
+				<td>$item['tname']</td>
+				<td>$item['clano']</td>
+				<td>$item['clagrade']</td>
+				<td>$item['clamajor']</td>
+				<td>$item['claid']</td>
+				<td>$item['avg']</td>
+				<td>$item['max']</td>
+				<td>$item['min']</td>
+				<td>$item['get_pass_ratio']</td>
+			</tr>
+		</table>
+	</div>
+</body>

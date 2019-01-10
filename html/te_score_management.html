@@ -1,0 +1,52 @@
+$def with (name,no,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>成绩管理界面</title>
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>教师</b>,教师号是<b>$no</b>,
+			<a href="/TE">返回</a>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table class="block-center" border="1">
+			<p>成绩表</p>
+			<tr>
+				<td>课程号</td>
+				<td>课程名</td>
+				<td>学年</td>
+				<td>学期</td>
+				<td>学号</td>
+				<td>学生名</td>
+				<td>年级</td>
+				<td>专业</td>
+				<td>班别</td>
+				<td>成绩</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['cno']</td>
+				<td>$item['cname']</td>
+				<td>$item['cyear']</td>
+				<td>$item['cteam']</td>
+				<td>$item['sno']</td>
+				<td>$item['sname']</td>
+				<td>$item['clagrade']</td>
+				<td>$item['clamajor']</td>
+				<td>$item['claid']</td>
+				<td>$item['score']</td>
+			</tr>
+		</table>
+		<div>
+			<form action="/te_update_score" method="post">
+				课程号:<input type="text" name="cno"><br>
+				学&nbsp&nbsp&nbsp号:<input type="text" name="sno"><br>
+				成&nbsp&nbsp&nbsp绩:<input type="text" name="score"><br>
+				<input type="submit" name="提交">
+			</form>
+		</div>
+	</div>
+</body>
