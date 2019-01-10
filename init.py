@@ -17,14 +17,14 @@ CREATE TABLE STUMAN.User(
 	no char(8) CHECK (no SIMILAR TO '\\d{8}')--符合该正则表达式，即8个数字符号
 );
 CREATE TABLE STUMAN.Teacher(
-	Tno char(8) PRIMARY KEY,
+	Tno char(8) PRIMARY KEY CHECK(Tno SIMILAR TO '\\d{8}'),
 	Tname char(10),
 	Tincome float(1),
 	Tloc char(5) CHECK (Tloc IN ('PR','AP','LE','RE'))
 	--分别为教授、副教授、讲师、研究员
 );
 CREATE TABLE STUMAN.Class(
-	CLAno char(8) PRIMARY KEY,
+	CLAno char(8) PRIMARY KEY CHECK(CLAno SIMILAR TO '\\d{8}'),
 	CLAmajor char(20),
 	CLAgrade int,
 	CLAid int,
@@ -38,7 +38,7 @@ CREATE TABLE STUMAN.Student(
 	Sdo char(10)
 );
 CREATE TABLE STUMAN.Course(
-	Cno char(8) PRIMARY KEY,
+	Cno char(8) PRIMARY KEY CHECK (Cno SIMILAR TO '\\d{8}'),
 	Cname char(30),
 	Ccredit float(1),
 	Cyear int,
@@ -106,9 +106,40 @@ SELECT
 	CLA.CLAgrade,CLA.CLAmajor,CLA.CLAid
 	,SC.Score
 FROM STUMAN.COU_VIEW C,STUMAN.Student ST,STUMAN.Score SC,STUMAN.Class CLA
-WHERE C.Cno=SC.Cno AND ST.Sno=SC.Sno;
+WHERE C.Cno=SC.Cno AND ST.Sno=SC.Sno AND ST.CLAno=CLA.CLAno;
 --成绩管理的视图
 
+'''
+
+function_create_command='''
+CREATE FUNCTION select_course(input_sno char(8),input_cno char(8)) RETURNS boolean
+--学生选课函数
+AS $$
+DECLARE
+	exist_course boolean;
+	is_com boolean;
+	have_selected boolean;
+BEGIN
+	SELECT exists(SELECT * FROM STUMAN.Score WHERE sno=input_sno AND cno=input_cno) INTO have_selected;
+	IF have_selected THEN
+		RAISE '已选修该课程';
+	END IF;
+
+	SELECT EXISTS(SELECT * FROM STUMAN.Course C WHERE C.cno=input_cno) INTO exist_course;
+	IF exist_course IS FALSE THEN
+		RAISE '课程不存在';
+	END IF;
+
+	SELECT ciscom FROM STUMAN.Course C WHERE C.cno=input_cno INTO is_com;
+	IF is_com THEN
+		RAISE '该课程不是选修课程';
+	END IF;
+
+	INSERT INTO STUMAN.Score VALUES(input_sno,input_cno,NULL);
+	RETURN True;
+END;
+$$
+LANGUAGE plpgsql;
 '''
 
 if __name__=='__main__':
@@ -130,5 +161,10 @@ if __name__=='__main__':
 	cursor.execute(view_create_command)
 	print('done')
 
+	print('creating function...')
+	cursor.execute(function_create_command)
+	print('done')
+
 	conn.commit()
+	print('commited')
 	print('all done')
