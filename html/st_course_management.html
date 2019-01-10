@@ -1,0 +1,46 @@
+$def with (name,no,data)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>课程管理</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="html/style.css">
+</head>
+<body>
+	<div>
+		<p align="right">你是<b>$name</b>,身份是<b>学生</b>,学号是<b>$no</b>,
+		<a href="/ST">返回</a>,<a href="/logout">退出</a></p>
+	</div>
+	<div class="text-center">
+		<table class="block-center" border="1">
+			<tr>
+				<td>课程号</td>
+				<td>课程名</td>
+				<td>学分</td>
+				<td>学年</td>
+				<td>学期</td>
+				<td>是否必修</td>
+				<td>教师号</td>
+				<td>教师名</td>
+				<td>分数</td>
+			</tr>
+		$for item in data:
+			<tr>
+				<td>$item['cno']</td>
+				<td>$item['cname']</td>
+				<td>$item['ccredit']</td>
+				<td>$item['cyear']</td>
+				<td>$item['cteam']</td>
+				<td>$item['ciscom']</td>
+				<td>$item['ctno']</td>
+				<td>$item['tname']</td>
+				<td>$item['score']</td>
+			</tr>
+		</table>
+		<form action="/st_select_course" method="post">
+			<p>选修</p>
+			课程号:<input type="text" name="cno">
+			<input type="submit" name="提交">
+		</form>
+	</div>
+</body>
